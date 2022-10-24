@@ -2,10 +2,8 @@ package com.deimoshall.matchprogramminglanguages
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,10 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val card1: View = findViewById(R.id.container_1)
-        val card2: View = findViewById(R.id.container_2)
-        val card3: View = findViewById(R.id.container_3)
-        val card4: View = findViewById(R.id.container_4)
+        val cardContainer1: View = findViewById(R.id.container_1)
+        val cardContainer2: View = findViewById(R.id.container_2)
+        val cardContainer3: View = findViewById(R.id.container_3)
+        val cardContainer4: View = findViewById(R.id.container_4)
 
         val backCard1 = BackCardFragment()
         val backCard2 = BackCardFragment()
@@ -48,56 +46,25 @@ class MainActivity : AppCompatActivity() {
         cardsOrdering.put(3, javaCard)
         cardsOrdering.put(4, cCard)
 
-        card1.setOnClickListener {
-            if (cardVisible) {
-                toggleCard(it, backCard1)
-                cardVisible = false
-            } else {
-                toggleCard(it, kotlinCard)
-                cardVisible = true
-            }
+        val card1 = Card(supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), backCard1)
+        val card2 = Card(supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), backCard2)
+        val card3 = Card(supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), backCard3)
+        val card4 = Card(supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), backCard4)
+
+        cardContainer1.setOnClickListener {
+            card1.toggle()
         }
 
-        card2.setOnClickListener {
-            if (cardVisible) {
-                toggleCard(it, backCard2)
-                cardVisible = false
-            } else {
-                toggleCard(it, pythonCard)
-                cardVisible = true
-            }
+        cardContainer2.setOnClickListener {
+            card2.toggle()
         }
 
-        card3.setOnClickListener {
-            if (cardVisible) {
-                toggleCard(it, backCard3)
-                cardVisible = false
-            } else {
-                toggleCard(it, javaCard)
-                cardVisible = true
-            }
+        cardContainer3.setOnClickListener {
+            card3.toggle()
         }
 
-        card4.setOnClickListener {
-            if (cardVisible) {
-                toggleCard(it, backCard4)
-                cardVisible = false
-            } else {
-                toggleCard(it, cCard)
-                cardVisible = true
-            }
-        }
-    }
-
-    private fun toggleCard(cardContainer: View, card: Fragment) {
-        Log.d("myTag", "Id: ${cardContainer.tag}, card: ${card}")
-        try {
-            supportFragmentManager.commit {
-                replace(cardContainer.id, card, "${cardContainer.id}")
-                setReorderingAllowed(true)
-            }
-        } catch (e: Exception) {
-            Log.d("myTag", "Toggle card error: $e")
+        cardContainer4.setOnClickListener {
+            card4.toggle()
         }
     }
 }
