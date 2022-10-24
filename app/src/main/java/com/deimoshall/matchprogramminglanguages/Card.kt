@@ -18,7 +18,7 @@ class Card(
         if (isVisible) {
             isVisible = false
 
-            Log.d("myTag", "$languageCard, $backCard isVisible: $isVisible")
+            Log.d("myTag", "$languageCard, $backCard isVisible: ${this.isVisible}")
             //Log.d("myTag", "Tag: ${cardContainer.tag}, card: $languageCard")
             try {
                 fragmentManager.commit {
@@ -31,7 +31,7 @@ class Card(
         } else {
             isVisible = true
 
-            Log.d("myTag", "$languageCard, $backCard isVisible: $isVisible")
+            Log.d("myTag", "$languageCard, $backCard isVisible: ${this.isVisible}")
             try {
                 fragmentManager.commit {
                     replace(cardContainer.id, languageCard)
