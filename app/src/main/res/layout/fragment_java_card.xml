@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:tag="back_card"
+    android:tag="java_card"
     tools:context=".BackCardFragment">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/back_cards" />
+        android:src="@drawable/java_card" />
 
 </LinearLayout>
