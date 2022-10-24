@@ -5,11 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".PythonCardFragment">
+    android:tag="c_card"
+    tools:context=".CSharpCardFragment">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/python_card" />
+        android:src="@drawable/c_sharp_card" />
 
 </LinearLayout>

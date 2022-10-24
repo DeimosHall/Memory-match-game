@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:tag="c_card"
-    tools:context=".BackCardFragment">
+    tools:context=".CCardFragment">
 
     <ImageView
         android:layout_width="match_parent"
