@@ -10,15 +10,16 @@ class Card(
     private val fragmentManager: FragmentManager,
     private val cardContainer: View,
     private val languageCard: Fragment,
+    private val languageCardName: String,
     private val backCard: Fragment) {
 
-    private var isVisible: Boolean = false
+    var isVisible: Boolean = false
 
     fun toggle() {
         if (isVisible) {
             isVisible = false
 
-            Log.d("myTag", "$languageCard, $backCard isVisible: ${this.isVisible}")
+            //Log.d("myTag", "$languageCard, $backCard isVisible: ${this.isVisible}")
             //Log.d("myTag", "Tag: ${cardContainer.tag}, card: $languageCard")
             try {
                 fragmentManager.commit {
@@ -41,5 +42,21 @@ class Card(
                 Log.d("myTag", "Toggle card error: $e")
             }
         }
+    }
+
+    fun getCardsContainer(): View {
+        return cardContainer
+    }
+
+    fun getName(): String {
+        return languageCardName
+    }
+
+    fun blockClick() {
+        cardContainer.isEnabled = false
+    }
+
+    fun allowClick() {
+        cardContainer.isEnabled = true
     }
 }

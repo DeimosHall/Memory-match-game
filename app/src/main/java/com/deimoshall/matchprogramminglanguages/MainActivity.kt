@@ -6,10 +6,15 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
     private var cardsOrdering = mutableMapOf<Int, Fragment>()
+    private var cardNames = mutableMapOf<Int, String>()
     lateinit var cardContainer1: View
     lateinit var cardContainer2: View
     lateinit var cardContainer3: View
@@ -88,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         val goCard1 = GoCardFragment()
         val goCard2 = GoCardFragment()
 
-        val languagesCards = listOf<Fragment>(
+        val languagesCards = listOf(
             kotlinCard1,
             kotlinCard2,
             cCard1,
@@ -107,24 +112,64 @@ class MainActivity : AppCompatActivity() {
             goCard2
         )
 
-        setCardsOrdering(languagesCards)
+        val languagesCardNames = listOf(
+            kotlinCard1.name,
+            kotlinCard2.name,
+            cCard1.name,
+            cCard2.name,
+            pythonCard1.name,
+            pythonCard2.name,
+            javaCard1.name,
+            javaCard2.name,
+            cSharpCard1.name,
+            cSharpCard2.name,
+            cPlusPlusCard1.name,
+            cPlusPlusCard2.name,
+            javascriptCard1.name,
+            javascriptCard2.name,
+            goCard1.name,
+            goCard2.name
+        )
 
-        val card1 = Card(supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), backCard1)
-        val card2 = Card(supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), backCard2)
-        val card3 = Card(supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), backCard3)
-        val card4 = Card(supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), backCard4)
-        val card5 = Card(supportFragmentManager, cardContainer5, cardsOrdering.getValue(5), backCard5)
-        val card6 = Card(supportFragmentManager, cardContainer6, cardsOrdering.getValue(6), backCard6)
-        val card7 = Card(supportFragmentManager, cardContainer7, cardsOrdering.getValue(7), backCard7)
-        val card8 = Card(supportFragmentManager, cardContainer8, cardsOrdering.getValue(8), backCard8)
-        val card9 = Card(supportFragmentManager, cardContainer9, cardsOrdering.getValue(9), backCard9)
-        val card10 = Card(supportFragmentManager, cardContainer10, cardsOrdering.getValue(10), backCard10)
-        val card11 = Card(supportFragmentManager, cardContainer11, cardsOrdering.getValue(11), backCard11)
-        val card12 = Card(supportFragmentManager, cardContainer12, cardsOrdering.getValue(12), backCard12)
-        val card13 = Card(supportFragmentManager, cardContainer13, cardsOrdering.getValue(13), backCard13)
-        val card14 = Card(supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), backCard14)
-        val card15 = Card(supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), backCard15)
-        val card16 = Card(supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), backCard16)
+        setCardsOrdering(languagesCards, languagesCardNames)
+
+        val card1 = Card(supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), cardNames.getValue(1), backCard1)
+        val card2 = Card(supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), cardNames.getValue(2), backCard2)
+        val card3 = Card(supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), cardNames.getValue(3), backCard3)
+        val card4 = Card(supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), cardNames.getValue(4), backCard4)
+        val card5 = Card(supportFragmentManager, cardContainer5, cardsOrdering.getValue(5), cardNames.getValue(5), backCard5)
+        val card6 = Card(supportFragmentManager, cardContainer6, cardsOrdering.getValue(6), cardNames.getValue(6), backCard6)
+        val card7 = Card(supportFragmentManager, cardContainer7, cardsOrdering.getValue(7), cardNames.getValue(7), backCard7)
+        val card8 = Card(supportFragmentManager, cardContainer8, cardsOrdering.getValue(8), cardNames.getValue(8), backCard8)
+        val card9 = Card(supportFragmentManager, cardContainer9, cardsOrdering.getValue(9), cardNames.getValue(9), backCard9)
+        val card10 = Card(supportFragmentManager, cardContainer10, cardsOrdering.getValue(10), cardNames.getValue(10), backCard10)
+        val card11 = Card(supportFragmentManager, cardContainer11, cardsOrdering.getValue(11), cardNames.getValue(11), backCard11)
+        val card12 = Card(supportFragmentManager, cardContainer12, cardsOrdering.getValue(12), cardNames.getValue(12), backCard12)
+        val card13 = Card(supportFragmentManager, cardContainer13, cardsOrdering.getValue(13), cardNames.getValue(13), backCard13)
+        val card14 = Card(supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), cardNames.getValue(14), backCard14)
+        val card15 = Card(supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), cardNames.getValue(15), backCard15)
+        val card16 = Card(supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), cardNames.getValue(16), backCard16)
+
+        val listOfCards = listOf(
+            card1,
+            card2,
+            card3,
+            card4,
+            card5,
+            card6,
+            card7,
+            card8,
+            card9,
+            card10,
+            card11,
+            card12,
+            card13,
+            card14,
+            card15,
+            card16
+        )
+
+        val game = Game(this, tvFoundPairs)
 
         val userName: String? = intent.getStringExtra("username")
         val testYourself: String? = intent.getStringExtra("test_yourself")
@@ -133,70 +178,135 @@ class MainActivity : AppCompatActivity() {
 
         cardContainer1.setOnClickListener {
             card1.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card1) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer2.setOnClickListener {
             card2.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card2) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer3.setOnClickListener {
             card3.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card3) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer4.setOnClickListener {
             card4.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card4) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer5.setOnClickListener {
             card5.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card5) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer6.setOnClickListener {
             card6.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card6) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer7.setOnClickListener {
             card7.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card7) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer8.setOnClickListener {
             card8.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card8) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer9.setOnClickListener {
             card9.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card9) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer10.setOnClickListener {
             card10.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card10) }
+                setFoundPairs(game.getFoundPairs())
+            }
+
         }
 
         cardContainer11.setOnClickListener {
             card11.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card11) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer12.setOnClickListener {
             card12.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card12) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer13.setOnClickListener {
             card13.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card13) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer14.setOnClickListener {
             card14.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card14) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer15.setOnClickListener {
             card15.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card15) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
 
         cardContainer16.setOnClickListener {
             card16.toggle()
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) { game.run(card16) }
+                setFoundPairs(game.getFoundPairs())
+            }
         }
     }
 
-    private fun setCardsOrdering(languagesCards: List<Fragment>) {
+    private fun setCardsOrdering(languagesCards: List<Fragment>, languagesCardNames: List<String>) {
         cardsOrdering[1] = languagesCards[0]
         cardsOrdering[2] = languagesCards[5]
         cardsOrdering[3] = languagesCards[1]
@@ -213,25 +323,30 @@ class MainActivity : AppCompatActivity() {
         cardsOrdering[14] = languagesCards[14]
         cardsOrdering[15] = languagesCards[11]
         cardsOrdering[16] = languagesCards[4]
+
+        cardNames[1] = languagesCardNames[0]
+        cardNames[2] = languagesCardNames[5]
+        cardNames[3] = languagesCardNames[1]
+        cardNames[4] = languagesCardNames[10]
+        cardNames[5] = languagesCardNames[9]
+        cardNames[6] = languagesCardNames[6]
+        cardNames[7] = languagesCardNames[8]
+        cardNames[8] = languagesCardNames[2]
+        cardNames[9] = languagesCardNames[12]
+        cardNames[10] = languagesCardNames[7]
+        cardNames[11] = languagesCardNames[13]
+        cardNames[12] = languagesCardNames[15]
+        cardNames[13] = languagesCardNames[3]
+        cardNames[14] = languagesCardNames[14]
+        cardNames[15] = languagesCardNames[11]
+        cardNames[16] = languagesCardNames[4]
     }
 
     private fun setUserName(userName: String?) {
         tvUsername.text = userName
     }
 
-    private fun setFoundPairs() {
-
-    }
-
-    private fun countPairs() {
-
-    }
-
-    private fun countActiveCards() {
-
-    }
-
-    private fun hideTwoCards() {
-
+    private fun setFoundPairs(pairs: Int) {
+        tvFoundPairs.text = getString(R.string.found_pairs) + " " + pairs
     }
 }
