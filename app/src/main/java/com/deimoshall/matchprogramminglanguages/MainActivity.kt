@@ -3,32 +3,56 @@ package com.deimoshall.matchprogramminglanguages
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
 
     private var cardsOrdering = mutableMapOf<Int, Fragment>()
+    lateinit var cardContainer1: View
+    lateinit var cardContainer2: View
+    lateinit var cardContainer3: View
+    lateinit var cardContainer4: View
+    lateinit var cardContainer5: View
+    lateinit var cardContainer6: View
+    lateinit var cardContainer7: View
+    lateinit var cardContainer8: View
+    lateinit var cardContainer9: View
+    lateinit var cardContainer10: View
+    lateinit var cardContainer11: View
+    lateinit var cardContainer12: View
+    lateinit var cardContainer13: View
+    lateinit var cardContainer14: View
+    lateinit var cardContainer15: View
+    lateinit var cardContainer16: View
+
+    private lateinit var tvUsername: TextView
+    private lateinit var tvFoundPairs: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cardContainer1: View = findViewById(R.id.container_1)
-        val cardContainer2: View = findViewById(R.id.container_2)
-        val cardContainer3: View = findViewById(R.id.container_3)
-        val cardContainer4: View = findViewById(R.id.container_4)
-        val cardContainer5: View = findViewById(R.id.container_5)
-        val cardContainer6: View = findViewById(R.id.container_6)
-        val cardContainer7: View = findViewById(R.id.container_7)
-        val cardContainer8: View = findViewById(R.id.container_8)
-        val cardContainer9: View = findViewById(R.id.container_9)
-        val cardContainer10: View = findViewById(R.id.container_10)
-        val cardContainer11: View = findViewById(R.id.container_11)
-        val cardContainer12: View = findViewById(R.id.container_12)
-        val cardContainer13: View = findViewById(R.id.container_13)
-        val cardContainer14: View = findViewById(R.id.container_14)
-        val cardContainer15: View = findViewById(R.id.container_15)
-        val cardContainer16: View = findViewById(R.id.container_16)
+        tvUsername = findViewById(R.id.tv_username)
+        tvFoundPairs = findViewById(R.id.tv_found_pairs)
+
+        cardContainer1 = findViewById(R.id.container_1)
+        cardContainer2 = findViewById(R.id.container_2)
+        cardContainer3 = findViewById(R.id.container_3)
+        cardContainer4 = findViewById(R.id.container_4)
+        cardContainer5 = findViewById(R.id.container_5)
+        cardContainer6 = findViewById(R.id.container_6)
+        cardContainer7 = findViewById(R.id.container_7)
+        cardContainer8 = findViewById(R.id.container_8)
+        cardContainer9 = findViewById(R.id.container_9)
+        cardContainer10 = findViewById(R.id.container_10)
+        cardContainer11 = findViewById(R.id.container_11)
+        cardContainer12 = findViewById(R.id.container_12)
+        cardContainer13 = findViewById(R.id.container_13)
+        cardContainer14 = findViewById(R.id.container_14)
+        cardContainer15 = findViewById(R.id.container_15)
+        cardContainer16 = findViewById(R.id.container_16)
 
         val backCard1 = BackCardFragment()
         val backCard2 = BackCardFragment()
@@ -101,6 +125,11 @@ class MainActivity : AppCompatActivity() {
         val card14 = Card(supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), backCard14)
         val card15 = Card(supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), backCard15)
         val card16 = Card(supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), backCard16)
+
+        val userName: String? = intent.getStringExtra("username")
+        val testYourself: String? = intent.getStringExtra("test_yourself")
+        setUserName(userName)
+        Toast.makeText(applicationContext, testYourself, Toast.LENGTH_SHORT).show()
 
         cardContainer1.setOnClickListener {
             card1.toggle()
@@ -184,5 +213,25 @@ class MainActivity : AppCompatActivity() {
         cardsOrdering[14] = languagesCards[14]
         cardsOrdering[15] = languagesCards[11]
         cardsOrdering[16] = languagesCards[4]
+    }
+
+    private fun setUserName(userName: String?) {
+        tvUsername.text = userName
+    }
+
+    private fun setFoundPairs() {
+
+    }
+
+    private fun countPairs() {
+
+    }
+
+    private fun countActiveCards() {
+
+    }
+
+    private fun hideTwoCards() {
+
     }
 }

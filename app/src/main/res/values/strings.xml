@@ -2,4 +2,15 @@
     <string name="app_name">Match programming languages</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <!-- Login activity -->
+    <string name="username">User name</string>
+    <string name="test_yourself">Test yourself</string>
+    <string name="get_started">Get started</string>
+
+    <!-- Login activity warnings -->
+    <string name="no_username">Enter an user name</string>
+
+    <!-- Main activity -->
+    <string name="found_pairs">Found pairs: </string>
 </resources>
