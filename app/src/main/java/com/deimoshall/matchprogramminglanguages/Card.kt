@@ -44,10 +44,6 @@ class Card(
         }
     }
 
-    fun getCardsContainer(): View {
-        return cardContainer
-    }
-
     fun getName(): String {
         return languageCardName
     }

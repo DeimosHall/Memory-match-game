@@ -19,6 +19,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var cbTestYourself: CheckBox
     lateinit var etUsername: EditText
     lateinit var mediaPlayer: MediaPlayer
+    lateinit var musicPlayer: MediaPlayer
     private var currentVideoPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
         cbTestYourself = findViewById(R.id.cb_test_yourself)
         etUsername = findViewById(R.id.et_username)
 
+        musicPlayer = MediaPlayer.create(applicationContext, R.raw.dark_terminal)
+
         val uri = Uri.parse("android.resource://" + packageName + "/" + R.raw.cmatrix)
         videoBackground.setVideoURI(uri)
         videoBackground.start()
@@ -37,6 +40,9 @@ class LoginActivity : AppCompatActivity() {
         videoBackground.setOnPreparedListener { mp ->
             mediaPlayer = mp
             mediaPlayer.isLooping = true
+
+            musicPlayer.start()
+            musicPlayer.isLooping = true
 
             if (currentVideoPosition != 0) {
                 mediaPlayer.seekTo(currentVideoPosition)
@@ -51,6 +57,7 @@ class LoginActivity : AppCompatActivity() {
             if (username.isEmpty()) {
                 Toast.makeText(applicationContext, R.string.no_username, Toast.LENGTH_SHORT).show()
             } else {
+                musicPlayer.pause()
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
                     putExtra("username", username)
                     putExtra("test_yourself", testYourself)
@@ -63,6 +70,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
 
+        musicPlayer.pause()
+
         currentVideoPosition = mediaPlayer.currentPosition
         videoBackground.pause()
     }
@@ -70,12 +79,14 @@ class LoginActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        musicPlayer.start()
         videoBackground.start()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
+        musicPlayer.release()
         mediaPlayer.release()
     }
 }

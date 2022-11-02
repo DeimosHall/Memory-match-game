@@ -1,5 +1,6 @@
 package com.deimoshall.matchprogramminglanguages
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private var cardsOrdering = mutableMapOf<Int, Fragment>()
     private var cardNames = mutableMapOf<Int, String>()
+    private var attempts: Int = 20
     lateinit var cardContainer1: View
     lateinit var cardContainer2: View
     lateinit var cardContainer3: View
@@ -34,10 +36,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var tvUsername: TextView
     private lateinit var tvFoundPairs: TextView
+    lateinit var musicPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        musicPlayer = MediaPlayer.create(this, R.raw.it_s_a_good_practice_bro)
+        musicPlayer.start()
+        musicPlayer.isLooping = true
 
         tvUsername = findViewById(R.id.tv_username)
         tvFoundPairs = findViewById(R.id.tv_found_pairs)
@@ -150,31 +157,11 @@ class MainActivity : AppCompatActivity() {
         val card15 = Card(supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), cardNames.getValue(15), backCard15)
         val card16 = Card(supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), cardNames.getValue(16), backCard16)
 
-        val listOfCards = listOf(
-            card1,
-            card2,
-            card3,
-            card4,
-            card5,
-            card6,
-            card7,
-            card8,
-            card9,
-            card10,
-            card11,
-            card12,
-            card13,
-            card14,
-            card15,
-            card16
-        )
-
-        val game = Game(this, tvFoundPairs)
+        val game = Game()
 
         val userName: String? = intent.getStringExtra("username")
         val testYourself: String? = intent.getStringExtra("test_yourself")
         setUserName(userName)
-        Toast.makeText(applicationContext, testYourself, Toast.LENGTH_SHORT).show()
 
         cardContainer1.setOnClickListener {
             card1.toggle()
@@ -304,6 +291,24 @@ class MainActivity : AppCompatActivity() {
                 setFoundPairs(game.getFoundPairs())
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        musicPlayer.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        musicPlayer.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        musicPlayer.release()
     }
 
     private fun setCardsOrdering(languagesCards: List<Fragment>, languagesCardNames: List<String>) {
