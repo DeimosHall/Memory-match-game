@@ -44,6 +44,7 @@ class LoginActivity : AppCompatActivity() {
             mediaPlayer.isLooping = true
 
             musicPlayer.start()
+            musicPlayer.setVolume(0.1f, 0.1f)
             musicPlayer.isLooping = true
 
             if (currentVideoPosition != 0) {

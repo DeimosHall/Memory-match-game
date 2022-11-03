@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         musicPlayer = MediaPlayer.create(this, R.raw.it_s_a_good_practice_bro)
         musicPlayer.start()
+        musicPlayer.setVolume(0.1f, 0.1f)
         musicPlayer.isLooping = true
 
         tvUsername = findViewById(R.id.tv_username)
@@ -166,6 +167,7 @@ class MainActivity : AppCompatActivity() {
         val userName: String? = intent.getStringExtra("username")
         val testYourself: String? = intent.getStringExtra("test_yourself")
         attempts = intent.getStringExtra("attempts")!!.toDouble()
+
         if (testYourself == "false") {
             tvAttempts.isVisible = false
             attempts = -1.0 // This avoids to lose the game
@@ -433,12 +435,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun winGame() {
+        playWinSound()
+
         WinGameDialogFragment(
             onSubmitClickListener = { restartGame() }
         ).show(supportFragmentManager, "WIN_DIALOG")
     }
 
     private fun loseGame() {
+        playLoseSound()
+
         LoseGameDialogFragment(
             onSubmitClickListener = { restartGame()}
         ).show(supportFragmentManager, "LOSE_DIALOG")
