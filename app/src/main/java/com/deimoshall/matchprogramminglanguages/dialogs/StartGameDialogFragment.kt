@@ -5,33 +5,38 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import com.deimoshall.matchprogramminglanguages.MainActivity
 import com.deimoshall.matchprogramminglanguages.R
+import com.deimoshall.matchprogramminglanguages.databinding.StartGameDialogBinding
 
-class StartGameDialogFragment() : DialogFragment() {
+class StartGameDialogFragment(
+    private val onSubmitClickListener: (String) -> Unit
+) : DialogFragment() {
+    private lateinit var binding: StartGameDialogBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = requireActivity().layoutInflater
+        binding = StartGameDialogBinding.inflate(LayoutInflater.from(context))
 
-            builder.setView(inflater.inflate(R.layout.start_game_dialog, null))
-                .setPositiveButton("Start",
-                DialogInterface.OnClickListener { dialogInterface, i ->
-                    // Start the game
-                })
-                .setNegativeButton("Cancel",
-                DialogInterface.OnClickListener { dialogInterface, i ->
-                    // Cancel the start of the game
-                    dialog?.cancel()
-                })
-            // Create the dialog object and returned it
-            builder.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setView(binding.root)
+
+        binding.btnCancel.setOnClickListener { dismiss() }
+
+        binding.btnStart.setOnClickListener {
+            onSubmitClickListener.invoke(binding.etAttemptsNumber.text.toString())
+            dismiss()
+        }
+
+        val dialog = builder.create()
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        return dialog
     }
 }

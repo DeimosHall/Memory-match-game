@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private var cardsOrdering = mutableMapOf<Int, Fragment>()
     private var cardNames = mutableMapOf<Int, String>()
-    private var attempts: Double = 20.0
+    private var attempts: Double = 0.0
     lateinit var cardContainer1: View
     lateinit var cardContainer2: View
     lateinit var cardContainer3: View
@@ -163,6 +163,7 @@ class MainActivity : AppCompatActivity() {
 
         val userName: String? = intent.getStringExtra("username")
         val testYourself: String? = intent.getStringExtra("test_yourself")
+        attempts = intent.getStringExtra("attempts")!!.toDouble()
         if (testYourself == "false") {
             tvAttempts.isVisible = false
             attempts = -1.0 // This avoids to lose the game

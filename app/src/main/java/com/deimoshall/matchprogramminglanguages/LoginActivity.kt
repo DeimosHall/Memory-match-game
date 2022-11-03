@@ -31,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
         btnGetStarted = findViewById(R.id.btn_get_started)
         cbTestYourself = findViewById(R.id.cb_test_yourself)
         etUsername = findViewById(R.id.et_username)
+        var attempts = 0
 
         musicPlayer = MediaPlayer.create(applicationContext, R.raw.dark_terminal)
 
@@ -56,20 +57,13 @@ class LoginActivity : AppCompatActivity() {
             val testYourself: String = cbTestYourself.isChecked.toString()
 
             if (testYourself == "true") {
-                val dialog = StartGameDialogFragment()
-                dialog.show(supportFragmentManager, "String?")
-            } else {
-                if (username.isEmpty()) {
-                    Toast.makeText(applicationContext, R.string.no_username, Toast.LENGTH_SHORT).show()
-                } else {
-                    musicPlayer.pause()
-                    val intent = Intent(applicationContext, MainActivity::class.java).apply {
-                        putExtra("username", username)
-                        putExtra("test_yourself", testYourself)
-                        putExtra("attempts", "0")
+                StartGameDialogFragment(
+                    onSubmitClickListener = { attempts ->
+                        startMainActivity(username, testYourself, attempts)
                     }
-                    startActivity(intent)
-                }
+                ).show(supportFragmentManager, "START_DIALOG")
+            } else {
+                startMainActivity(username, testYourself, attempts.toString())
             }
         }
     }
@@ -94,5 +88,19 @@ class LoginActivity : AppCompatActivity() {
 
         musicPlayer.release()
         mediaPlayer.release()
+    }
+
+    private fun startMainActivity(username: String, testYourself: String, attempts: String) {
+        if (username.isEmpty()) {
+            Toast.makeText(applicationContext, R.string.no_username, Toast.LENGTH_SHORT).show()
+        } else {
+            musicPlayer.pause()
+            val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                putExtra("username", username)
+                putExtra("test_yourself", testYourself)
+                putExtra("attempts", attempts)
+            }
+            startActivity(intent)
+        }
     }
 }
