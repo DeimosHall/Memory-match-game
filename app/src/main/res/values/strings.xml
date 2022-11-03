@@ -18,4 +18,12 @@
     <string name="attempts_number">Number of attempts</string>
     <string name="cancel">Cancel</string>
     <string name="start">Start</string>
+
+    <!-- Win game dialog -->
+    <string name="you_won">You won!</string>
+    <string name="close">Close</string>
+    <string name="play_again">Play again</string>
+
+    <!-- Win game dialog -->
+    <string name="you_lost">Your lost!</string>
 </resources>

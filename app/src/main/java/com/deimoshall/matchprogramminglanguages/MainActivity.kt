@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.deimoshall.matchprogramminglanguages.dialogs.LoseGameDialogFragment
+import com.deimoshall.matchprogramminglanguages.dialogs.WinGameDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -179,6 +181,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card1) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -188,6 +191,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card2) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -197,6 +201,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card3) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -206,6 +211,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card4) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -215,6 +221,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card5) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -224,6 +231,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card6) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -233,6 +241,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card7) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -242,6 +251,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card8) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -251,6 +261,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card9) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -260,6 +271,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card10) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
 
         }
@@ -270,6 +282,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card11) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -279,6 +292,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card12) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -288,6 +302,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card13) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -297,6 +312,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card14) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -306,6 +322,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card15) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
 
@@ -315,6 +332,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card16) }
                 setPoints(game.getFoundPairs())
+                winOrLoseListener(game.getFoundPairs())
             }
         }
     }
@@ -388,5 +406,41 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAttempts() {
         tvAttempts.text = "${getString(R.string.attempts)} ${attempts.toInt()}"
+    }
+
+    private fun playWinSound() {
+        val soundPlayer = MediaPlayer.create(this, R.raw.win_game)
+        soundPlayer.start()
+    }
+
+    private fun playLoseSound() {
+        val soundPlayer = MediaPlayer.create(this, R.raw.lose_game)
+        soundPlayer.start()
+    }
+
+    private fun restartGame() {
+        startActivity(intent)
+        finish()
+    }
+
+    private fun winOrLoseListener(pairs: Int) {
+        if (pairs == 8 && attempts > 0.0) {
+            winGame()
+        }
+        if (attempts == 0.0) {
+            loseGame()
+        }
+    }
+
+    private fun winGame() {
+        WinGameDialogFragment(
+            onSubmitClickListener = { restartGame() }
+        ).show(supportFragmentManager, "WIN_DIALOG")
+    }
+
+    private fun loseGame() {
+        LoseGameDialogFragment(
+            onSubmitClickListener = { restartGame()}
+        ).show(supportFragmentManager, "LOSE_DIALOG")
     }
 }
