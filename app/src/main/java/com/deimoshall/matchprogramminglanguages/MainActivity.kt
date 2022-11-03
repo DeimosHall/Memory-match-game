@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private var cardsOrdering = mutableMapOf<Int, Fragment>()
     private var cardNames = mutableMapOf<Int, String>()
-    private var attempts: Int = 20
+    private var attempts: Double = 20.0
     lateinit var cardContainer1: View
     lateinit var cardContainer2: View
     lateinit var cardContainer3: View
@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var cardContainer16: View
 
     private lateinit var tvUsername: TextView
-    private lateinit var tvFoundPairs: TextView
+    private lateinit var tvPoints: TextView
+    private lateinit var tvAttempts: TextView
     lateinit var musicPlayer: MediaPlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +48,8 @@ class MainActivity : AppCompatActivity() {
         musicPlayer.isLooping = true
 
         tvUsername = findViewById(R.id.tv_username)
-        tvFoundPairs = findViewById(R.id.tv_found_pairs)
+        tvPoints = findViewById(R.id.tv_points)
+        tvAttempts = findViewById(R.id.tv_attempts)
 
         cardContainer1 = findViewById(R.id.container_1)
         cardContainer2 = findViewById(R.id.container_2)
@@ -140,155 +142,178 @@ class MainActivity : AppCompatActivity() {
 
         setCardsOrdering(languagesCards, languagesCardNames)
 
-        val card1 = Card(supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), cardNames.getValue(1), backCard1)
-        val card2 = Card(supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), cardNames.getValue(2), backCard2)
-        val card3 = Card(supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), cardNames.getValue(3), backCard3)
-        val card4 = Card(supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), cardNames.getValue(4), backCard4)
-        val card5 = Card(supportFragmentManager, cardContainer5, cardsOrdering.getValue(5), cardNames.getValue(5), backCard5)
-        val card6 = Card(supportFragmentManager, cardContainer6, cardsOrdering.getValue(6), cardNames.getValue(6), backCard6)
-        val card7 = Card(supportFragmentManager, cardContainer7, cardsOrdering.getValue(7), cardNames.getValue(7), backCard7)
-        val card8 = Card(supportFragmentManager, cardContainer8, cardsOrdering.getValue(8), cardNames.getValue(8), backCard8)
-        val card9 = Card(supportFragmentManager, cardContainer9, cardsOrdering.getValue(9), cardNames.getValue(9), backCard9)
-        val card10 = Card(supportFragmentManager, cardContainer10, cardsOrdering.getValue(10), cardNames.getValue(10), backCard10)
-        val card11 = Card(supportFragmentManager, cardContainer11, cardsOrdering.getValue(11), cardNames.getValue(11), backCard11)
-        val card12 = Card(supportFragmentManager, cardContainer12, cardsOrdering.getValue(12), cardNames.getValue(12), backCard12)
-        val card13 = Card(supportFragmentManager, cardContainer13, cardsOrdering.getValue(13), cardNames.getValue(13), backCard13)
-        val card14 = Card(supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), cardNames.getValue(14), backCard14)
-        val card15 = Card(supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), cardNames.getValue(15), backCard15)
-        val card16 = Card(supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), cardNames.getValue(16), backCard16)
+        val card1 = Card(this, supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), cardNames.getValue(1), backCard1)
+        val card2 = Card(this, supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), cardNames.getValue(2), backCard2)
+        val card3 = Card(this, supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), cardNames.getValue(3), backCard3)
+        val card4 = Card(this, supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), cardNames.getValue(4), backCard4)
+        val card5 = Card(this, supportFragmentManager, cardContainer5, cardsOrdering.getValue(5), cardNames.getValue(5), backCard5)
+        val card6 = Card(this, supportFragmentManager, cardContainer6, cardsOrdering.getValue(6), cardNames.getValue(6), backCard6)
+        val card7 = Card(this, supportFragmentManager, cardContainer7, cardsOrdering.getValue(7), cardNames.getValue(7), backCard7)
+        val card8 = Card(this, supportFragmentManager, cardContainer8, cardsOrdering.getValue(8), cardNames.getValue(8), backCard8)
+        val card9 = Card(this, supportFragmentManager, cardContainer9, cardsOrdering.getValue(9), cardNames.getValue(9), backCard9)
+        val card10 = Card(this, supportFragmentManager, cardContainer10, cardsOrdering.getValue(10), cardNames.getValue(10), backCard10)
+        val card11 = Card(this, supportFragmentManager, cardContainer11, cardsOrdering.getValue(11), cardNames.getValue(11), backCard11)
+        val card12 = Card(this, supportFragmentManager, cardContainer12, cardsOrdering.getValue(12), cardNames.getValue(12), backCard12)
+        val card13 = Card(this, supportFragmentManager, cardContainer13, cardsOrdering.getValue(13), cardNames.getValue(13), backCard13)
+        val card14 = Card(this, supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), cardNames.getValue(14), backCard14)
+        val card15 = Card(this, supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), cardNames.getValue(15), backCard15)
+        val card16 = Card(this, supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), cardNames.getValue(16), backCard16)
 
-        val game = Game()
+        val game = Game(this)
 
         val userName: String? = intent.getStringExtra("username")
         val testYourself: String? = intent.getStringExtra("test_yourself")
+        if (testYourself == "false") {
+            tvAttempts.isVisible = false
+            attempts = -1.0 // This avoids to lose the game
+        }
+
         setUserName(userName)
+        setPoints(0)
+        setAttempts()
 
         cardContainer1.setOnClickListener {
             card1.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card1) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer2.setOnClickListener {
             card2.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card2) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer3.setOnClickListener {
             card3.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card3) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer4.setOnClickListener {
             card4.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card4) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer5.setOnClickListener {
             card5.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card5) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer6.setOnClickListener {
             card6.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card6) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer7.setOnClickListener {
             card7.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card7) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer8.setOnClickListener {
             card8.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card8) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer9.setOnClickListener {
             card9.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card9) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer10.setOnClickListener {
             card10.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card10) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
 
         }
 
         cardContainer11.setOnClickListener {
             card11.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card11) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer12.setOnClickListener {
             card12.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card12) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer13.setOnClickListener {
             card13.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card13) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer14.setOnClickListener {
             card14.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card14) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer15.setOnClickListener {
             card15.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card15) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
 
         cardContainer16.setOnClickListener {
             card16.toggle()
+            updateAttempts()
             lifecycleScope.launch {
                 withContext(Dispatchers.IO) { game.run(card16) }
-                setFoundPairs(game.getFoundPairs())
+                setPoints(game.getFoundPairs())
             }
         }
     }
@@ -351,7 +376,16 @@ class MainActivity : AppCompatActivity() {
         tvUsername.text = userName
     }
 
-    private fun setFoundPairs(pairs: Int) {
-        tvFoundPairs.text = getString(R.string.found_pairs) + " " + pairs
+    private fun setPoints(pairs: Int) {
+        tvPoints.text = "${getString(R.string.points)} ${pairs * 100}"
+    }
+
+    private fun updateAttempts() {
+        attempts -= 0.5
+        setAttempts()
+    }
+
+    private fun setAttempts() {
+        tvAttempts.text = "${getString(R.string.attempts)} ${attempts.toInt()}"
     }
 }

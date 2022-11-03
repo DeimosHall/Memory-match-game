@@ -11,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import android.widget.VideoView
+import com.deimoshall.matchprogramminglanguages.dialogs.StartGameDialogFragment
 
 class LoginActivity : AppCompatActivity() {
 
@@ -54,15 +55,21 @@ class LoginActivity : AppCompatActivity() {
             val username: String = etUsername.text.toString()
             val testYourself: String = cbTestYourself.isChecked.toString()
 
-            if (username.isEmpty()) {
-                Toast.makeText(applicationContext, R.string.no_username, Toast.LENGTH_SHORT).show()
+            if (testYourself == "true") {
+                val dialog = StartGameDialogFragment()
+                dialog.show(supportFragmentManager, "String?")
             } else {
-                musicPlayer.pause()
-                val intent = Intent(applicationContext, MainActivity::class.java).apply {
-                    putExtra("username", username)
-                    putExtra("test_yourself", testYourself)
+                if (username.isEmpty()) {
+                    Toast.makeText(applicationContext, R.string.no_username, Toast.LENGTH_SHORT).show()
+                } else {
+                    musicPlayer.pause()
+                    val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                        putExtra("username", username)
+                        putExtra("test_yourself", testYourself)
+                        putExtra("attempts", "0")
+                    }
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         }
     }
@@ -71,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
         super.onPause()
 
         musicPlayer.pause()
-
         currentVideoPosition = mediaPlayer.currentPosition
         videoBackground.pause()
     }

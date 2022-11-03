@@ -11,5 +11,9 @@
 
     <!-- Main activity -->
     <string name="found_pairs">Found pairs:</string>
+    <string name="points">Points:</string>
     <string name="attempts">Remaining attempts:</string>
+
+    <!-- Start game dialog -->
+    <string name="attempts_number">Number of attempts</string>
 </resources>

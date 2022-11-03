@@ -1,11 +1,12 @@
 package com.deimoshall.matchprogramminglanguages
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.TextView
 
-class Game() {
+class Game(context: Context) {
     private var foundPairs: Int = 0
     private var visibleCards: Int = 0
     private var currentVisibleCards = mutableListOf<Card>()
