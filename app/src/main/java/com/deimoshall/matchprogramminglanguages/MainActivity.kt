@@ -3,8 +3,10 @@ package com.deimoshall.matchprogramminglanguages
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,11 +15,12 @@ import com.deimoshall.matchprogramminglanguages.dialogs.WinGameDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var cardsOrdering = mutableMapOf<Int, Fragment>()
-    private var cardNames = mutableMapOf<Int, String>()
+    private var cardsOrdering = mutableListOf<Fragment>()
+    private var cardNames = mutableListOf<String>()
     private var attempts: Double = 0.0
     lateinit var cardContainer1: View
     lateinit var cardContainer2: View
@@ -105,62 +108,42 @@ class MainActivity : AppCompatActivity() {
         val goCard1 = GoCardFragment()
         val goCard2 = GoCardFragment()
 
-        val languagesCards = listOf(
-            kotlinCard1,
-            kotlinCard2,
-            cCard1,
-            cCard2,
-            pythonCard1,
-            pythonCard2,
-            javaCard1,
-            javaCard2,
-            cSharpCard1,
-            cSharpCard2,
-            cPlusPlusCard1,
-            cPlusPlusCard2,
-            javascriptCard1,
-            javascriptCard2,
-            goCard1,
-            goCard2
+        val languagesCards = mutableListOf(
+            listOf(kotlinCard1, kotlinCard1.name),
+            listOf(kotlinCard2, kotlinCard2.name),
+            listOf(cCard1, cCard1.name),
+            listOf(cCard2, cCard2.name),
+            listOf(pythonCard1, pythonCard1.name),
+            listOf(pythonCard2, pythonCard2.name),
+            listOf(javaCard1, javaCard1.name),
+            listOf(javaCard2, javaCard2.name),
+            listOf(cSharpCard1, cSharpCard1.name),
+            listOf(cSharpCard2, cSharpCard2.name),
+            listOf(cPlusPlusCard1, cPlusPlusCard1.name),
+            listOf(cPlusPlusCard2, cPlusPlusCard2.name),
+            listOf(javascriptCard1, javascriptCard1.name),
+            listOf(javascriptCard2, javascriptCard2.name),
+            listOf(goCard1, goCard1.name),
+            listOf(goCard2, goCard2.name)
         )
+        languagesCards.shuffle()
 
-        val languagesCardNames = listOf(
-            kotlinCard1.name,
-            kotlinCard2.name,
-            cCard1.name,
-            cCard2.name,
-            pythonCard1.name,
-            pythonCard2.name,
-            javaCard1.name,
-            javaCard2.name,
-            cSharpCard1.name,
-            cSharpCard2.name,
-            cPlusPlusCard1.name,
-            cPlusPlusCard2.name,
-            javascriptCard1.name,
-            javascriptCard2.name,
-            goCard1.name,
-            goCard2.name
-        )
-
-        setCardsOrdering(languagesCards, languagesCardNames)
-
-        val card1 = Card(this, supportFragmentManager, cardContainer1, cardsOrdering.getValue(1), cardNames.getValue(1), backCard1)
-        val card2 = Card(this, supportFragmentManager, cardContainer2, cardsOrdering.getValue(2), cardNames.getValue(2), backCard2)
-        val card3 = Card(this, supportFragmentManager, cardContainer3, cardsOrdering.getValue(3), cardNames.getValue(3), backCard3)
-        val card4 = Card(this, supportFragmentManager, cardContainer4, cardsOrdering.getValue(4), cardNames.getValue(4), backCard4)
-        val card5 = Card(this, supportFragmentManager, cardContainer5, cardsOrdering.getValue(5), cardNames.getValue(5), backCard5)
-        val card6 = Card(this, supportFragmentManager, cardContainer6, cardsOrdering.getValue(6), cardNames.getValue(6), backCard6)
-        val card7 = Card(this, supportFragmentManager, cardContainer7, cardsOrdering.getValue(7), cardNames.getValue(7), backCard7)
-        val card8 = Card(this, supportFragmentManager, cardContainer8, cardsOrdering.getValue(8), cardNames.getValue(8), backCard8)
-        val card9 = Card(this, supportFragmentManager, cardContainer9, cardsOrdering.getValue(9), cardNames.getValue(9), backCard9)
-        val card10 = Card(this, supportFragmentManager, cardContainer10, cardsOrdering.getValue(10), cardNames.getValue(10), backCard10)
-        val card11 = Card(this, supportFragmentManager, cardContainer11, cardsOrdering.getValue(11), cardNames.getValue(11), backCard11)
-        val card12 = Card(this, supportFragmentManager, cardContainer12, cardsOrdering.getValue(12), cardNames.getValue(12), backCard12)
-        val card13 = Card(this, supportFragmentManager, cardContainer13, cardsOrdering.getValue(13), cardNames.getValue(13), backCard13)
-        val card14 = Card(this, supportFragmentManager, cardContainer14, cardsOrdering.getValue(14), cardNames.getValue(14), backCard14)
-        val card15 = Card(this, supportFragmentManager, cardContainer15, cardsOrdering.getValue(15), cardNames.getValue(15), backCard15)
-        val card16 = Card(this, supportFragmentManager, cardContainer16, cardsOrdering.getValue(16), cardNames.getValue(16), backCard16)
+        val card1 = Card(this, supportFragmentManager, cardContainer1, languagesCards[0][0] as Fragment, languagesCards[0][1] as String, backCard1)
+        val card2 = Card(this, supportFragmentManager, cardContainer2, languagesCards[1][0] as Fragment, languagesCards[1][1] as String, backCard2)
+        val card3 = Card(this, supportFragmentManager, cardContainer3, languagesCards[2][0] as Fragment, languagesCards[2][1] as String, backCard3)
+        val card4 = Card(this, supportFragmentManager, cardContainer4, languagesCards[3][0] as Fragment, languagesCards[3][1] as String, backCard4)
+        val card5 = Card(this, supportFragmentManager, cardContainer5, languagesCards[4][0] as Fragment, languagesCards[4][1] as String, backCard5)
+        val card6 = Card(this, supportFragmentManager, cardContainer6, languagesCards[5][0] as Fragment, languagesCards[5][1] as String, backCard6)
+        val card7 = Card(this, supportFragmentManager, cardContainer7, languagesCards[6][0] as Fragment, languagesCards[6][1] as String, backCard7)
+        val card8 = Card(this, supportFragmentManager, cardContainer8, languagesCards[7][0] as Fragment, languagesCards[7][1] as String, backCard8)
+        val card9 = Card(this, supportFragmentManager, cardContainer9, languagesCards[8][0] as Fragment, languagesCards[8][1] as String, backCard9)
+        val card10 = Card(this, supportFragmentManager, cardContainer10, languagesCards[9][0] as Fragment, languagesCards[9][1] as String, backCard10)
+        val card11 = Card(this, supportFragmentManager, cardContainer11, languagesCards[10][0] as Fragment, languagesCards[10][1] as String, backCard11)
+        val card12 = Card(this, supportFragmentManager, cardContainer12, languagesCards[11][0] as Fragment, languagesCards[11][1] as String, backCard12)
+        val card13 = Card(this, supportFragmentManager, cardContainer13, languagesCards[12][0] as Fragment, languagesCards[12][1] as String, backCard13)
+        val card14 = Card(this, supportFragmentManager, cardContainer14, languagesCards[13][0] as Fragment, languagesCards[13][1] as String, backCard14)
+        val card15 = Card(this, supportFragmentManager, cardContainer15, languagesCards[14][0] as Fragment, languagesCards[14][1] as String, backCard15)
+        val card16 = Card(this, supportFragmentManager, cardContainer16, languagesCards[15][0] as Fragment, languagesCards[15][1] as String, backCard16)
 
         val game = Game(this)
 
@@ -170,11 +153,11 @@ class MainActivity : AppCompatActivity() {
 
         if (testYourself == "false") {
             tvAttempts.isVisible = false
-            attempts = -1.0 // This avoids to lose the game
+            attempts = 100.0 // This avoids to lose the game, I guess
         }
 
         setUserName(userName)
-        setPoints(0)
+        setPoints()
         setAttempts()
 
         cardContainer1.setOnClickListener {
@@ -357,47 +340,11 @@ class MainActivity : AppCompatActivity() {
         musicPlayer.release()
     }
 
-    private fun setCardsOrdering(languagesCards: List<Fragment>, languagesCardNames: List<String>) {
-        cardsOrdering[1] = languagesCards[0]
-        cardsOrdering[2] = languagesCards[5]
-        cardsOrdering[3] = languagesCards[1]
-        cardsOrdering[4] = languagesCards[10]
-        cardsOrdering[5] = languagesCards[9]
-        cardsOrdering[6] = languagesCards[6]
-        cardsOrdering[7] = languagesCards[8]
-        cardsOrdering[8] = languagesCards[2]
-        cardsOrdering[9] = languagesCards[12]
-        cardsOrdering[10] = languagesCards[7]
-        cardsOrdering[11] = languagesCards[13]
-        cardsOrdering[12] = languagesCards[15]
-        cardsOrdering[13] = languagesCards[3]
-        cardsOrdering[14] = languagesCards[14]
-        cardsOrdering[15] = languagesCards[11]
-        cardsOrdering[16] = languagesCards[4]
-
-        cardNames[1] = languagesCardNames[0]
-        cardNames[2] = languagesCardNames[5]
-        cardNames[3] = languagesCardNames[1]
-        cardNames[4] = languagesCardNames[10]
-        cardNames[5] = languagesCardNames[9]
-        cardNames[6] = languagesCardNames[6]
-        cardNames[7] = languagesCardNames[8]
-        cardNames[8] = languagesCardNames[2]
-        cardNames[9] = languagesCardNames[12]
-        cardNames[10] = languagesCardNames[7]
-        cardNames[11] = languagesCardNames[13]
-        cardNames[12] = languagesCardNames[15]
-        cardNames[13] = languagesCardNames[3]
-        cardNames[14] = languagesCardNames[14]
-        cardNames[15] = languagesCardNames[11]
-        cardNames[16] = languagesCardNames[4]
-    }
-
     private fun setUserName(userName: String?) {
         tvUsername.text = userName
     }
 
-    private fun setPoints(pairs: Int) {
+    private fun setPoints(pairs: Int = 0) {
         tvPoints.text = "${getString(R.string.points)} ${pairs * 100}"
     }
 
