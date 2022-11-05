@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         musicPlayer = MediaPlayer.create(this, R.raw.it_s_a_good_practice_bro)
         musicPlayer.start()
-        musicPlayer.setVolume(0.1f, 0.1f)
+        musicPlayer.setVolume(0.2f, 0.2f)
         musicPlayer.isLooping = true
 
         tvUsername = findViewById(R.id.tv_username)
