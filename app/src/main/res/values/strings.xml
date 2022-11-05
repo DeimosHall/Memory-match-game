@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">Match programming languages</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Login activity -->
+    <string name="username">User name</string>
+    <string name="test_yourself">Test yourself</string>
+    <string name="play">Play</string>
+
+    <!-- Login activity warnings -->
+    <string name="no_username">Enter an user name</string>
+
+    <!-- Main activity -->
+    <string name="found_pairs">Found pairs:</string>
+    <string name="points">Points:</string>
+    <string name="attempts">Remaining attempts:</string>
+
+    <!-- Start game dialog -->
+    <string name="attempts_number">Number of attempts</string>
+    <string name="cancel">Cancel</string>
+    <string name="start">Start</string>
+
+    <!-- Win game dialog -->
+    <string name="you_won">You won!</string>
+    <string name="close">Close</string>
+    <string name="play_again">Play again</string>
+
+    <!-- Win game dialog -->
+    <string name="you_lost">Your lost!</string>
 </resources>
