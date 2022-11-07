@@ -33,14 +33,11 @@
             android:orientation="vertical">
 
             <EditText
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
                 android:id="@+id/et_username"
+                style="@style/Widget.AppCompat.EditText.WhiteEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_person"
-                android:drawablePadding="10dp"
-                android:background="@drawable/custom_edit_text"
-                android:elevation="6dp"
                 android:hint="@string/username" />
 
             <CheckBox

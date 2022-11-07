@@ -22,17 +22,11 @@
 
             <EditText
                 android:id="@+id/etAttemptsNumber"
-                style="@style/ThemeOverlay.Material3.TextInputEditText"
+                style="@style/Widget.AppCompat.EditText.WhiteEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="15dp"
                 android:hint="@string/attempts_number"
-                android:inputType="number"
-                android:background="@drawable/custom_edit_text"
-                android:elevation="6dp"/>
+                android:inputType="number"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
